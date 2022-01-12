@@ -1,0 +1,173 @@
+---
+title: "Math 189 Discussion Week 1"
+author: "Dante Wu (email: g5wu@ucsd.edu)"
+date: "01/07/2022"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. R Markdown Tutorial
+Click on the following link for R Markdown tutorial:
+
+- [R Markdown Tutorial](https://rmarkdown.rstudio.com/lesson-1.html)
+
+# 2. Installation
+To get RMarkdown working in RStudio, the first thing you need is the rmarkdown package, which can be installed using the following commands in RStudio:
+```
+install.packages("rmarkdown")
+```
+You can open a new .Rmd file in the RStudio IDE by going to File > New File > R Markdown…
+
+# 3. Syntax
+Markdown is a simple formatting language designed to make authoring content easy for everyone. Rather than write in complex markup code (e.g. HTML or LaTex), you write in plain text with formatting cues. Once you knit your document, the output will display text formatted according to the following simple rules.
+
+## Formatting
+Here are a few common formatting commands:
+
+plain text
+
+*Italic*
+
+**Bold** or __Bold__
+
+This is `code` in text
+
+`------------------------------------------`
+
+# Headers 1
+## Header 2
+### Header 3
+
+*Remark:* Note that when a `#` symbol is placed inside a code chunk it acts as a normal R comment, but when placed in text it controls the header size.
+
+`------------------------------------------`
+
+* unordered list
+  + subitem 1
+  + subitem 2
+
+1. Ordered list
+  + subitem 1
+  + subitem 2
+
+`------------------------------------------`
+
+You can also type formulas using Latex syntax:
+$$ \bar{X} = \frac{1}{n} \sum_{i = 1}^n X_i$$
+When you create `.pdf` documents, Latex is usually required. If you didn't install Latex beforehand, you may use TinyTex within RStudio. Restart your R session (Session -> Restart R), then run these line in the console:
+```
+install.packages("tinytex")
+tinytex::install_tinytex()
+```
+
+# 4. Code Chunks
+```{r}
+paste("Hello","World!")
+```
+
+If you don’t want the code of a particular code chunk to appear in the document, but still want to show the output (e.g. a plot), then you can include `echo = FALSE` in the code chunk instructions.
+```{r eval = TRUE, echo = FALSE}
+paste("Hello","world!")
+```
+
+Similarly, you might want to create an object, but not include both the code and the output in the final file. To do this you can use `include = FALSE`. Be aware though, it’s often not a good idea to completely hide some part of your analysis.
+```{r eval = TRUE, include = FALSE}
+paste("Hello","world!")
+```
+
+For more infromation of chunk options, see the [R Markdown reference guide.](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+## Inserting Figures
+Inserting a graph into RMarkdown is easy, the more energy-demanding aspect might be adjusting the formatting.
+
+By default, RMarkdown will place graphs by maximising their height, while keeping them within the margins of the page and maintaining aspect ratio. If you have a particularly tall figure, this can mean a really huge graph. In the following example we modify the dimensions of the figure we created above. To manually set the figure dimensions, you can insert an instruction into the curly braces:
+```{r, fig.width = 4, fig.height = 3}
+A <- c("a", "a", "b", "b")
+B <- c(5, 10, 15, 20)
+dataframe <- data.frame(A, B)
+boxplot(B~A,data=dataframe)
+```
+
+## Inserting Tables
+R Markdown can print the contents of a data frame easily by enclosing the name of the data frame in a code chunk:
+```{r}
+dataframe
+```
+
+If you prefer that data be displayed with additional formatting you can use the `knitr::kable` function, as in code chunk below. Remember to load the `knitr` package in your `.Rmd` file as well:
+```{r, warning = FALSE, results = 'asis'}
+library(knitr)
+kable(dataframe)
+kable(mtcars[1:5,],caption = "A knitr table.")
+```
+
+Note the use of the `results='asis'` chunk option. This is required to ensure that the raw table output isn’t processed further by knitr.
+
+## Inline R Code
+You can also evaluate R expressions inline by enclosing the expression within a single back-tick qualified with ‘r’. For example, the following code embeds R results as text in the output:
+
+I count `r sum(c(1,2,3))` cars on the highway.
+
+## Rendering Output
+There are two ways to render an R Markdown document into it’s final output format. If you are using RStudio, then the “Knit” button (Ctrl+Shift+K) will render the document and display a preview of it.
+
+If you are not using RStudio then you simply need to call the rmarkdown::render function, for example:
+
+rmarkdown::render("input.Rmd")
+
+Note that both methods use the same mechanism; RStudio’s “Knit” button calls rmarkdown::render() under the hood.
+
+# 5. Common Mathematical expressions in Latex (Rmarkdown)
+## Mathematical modes
+1. Inline mode
+2. Display mode
+
+The mass-energy equivalence is described by the famous equation
+$$E=mc^2$$
+discovered in 1905 by Albert Einstein. 
+In natural units ($c = 1$), the formula expresses the identity
+\begin{equation}
+E=m
+\end{equation}
+(without number)
+\begin{equation*}
+E = m
+\end{equation*}
+
+\begin{align*}
+x &= 1\\
+y &= 2\\
+z &= 3
+\end{align*}
+
+## Symbols
+Greek letters:
+$$
+\alpha,\beta,\gamma,\rho,\sigma,\delta,\epsilon,...
+$$
+Binary operators:
+$$
++,-,*,/,\times,\cdot,\cup,\cap,...
+$$
+Relation operators:
+$$
+<,>,=,\leq,\geq,\neq,\subset,\supset,\subseteq,\supseteq,...
+$$
+Others:
+$$
+\int,\oint,\sum,\prod
+$$
+
+## Subscripts and superscripts
+
+sum $\sum_{i=1}^n$, fraction $\frac{1}{n}$
+$$
+x^a,x^aa,x^{aa},x_n,x_n^2,\int_a^b,\sum_{i\leq 10},\sum_{i=1}^n,\prod_{i=1}^{10}
+$$
+Want more? See https://www.overleaf.com/learn/latex/Mathematical_expressions or google what you want.
+
+# Some R basics
+Refer to `Some R basics.R`
