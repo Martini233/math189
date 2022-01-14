@@ -1,0 +1,63 @@
+---
+title: "MATH189 HW1"
+author: "Ning Ma, Zijie Lei, Kancheng Yin"
+date: "2022/1/11"
+output: html_document
+---
+
+## Q1
+```{r}
+my_cars <- read.csv(file = "/Users/Rah/Downloads/mtcars.csv")
+for (i in 2:ncol(my_cars)){
+  sample_mean = mean(my_cars[[i]])
+  sample_var = var(my_cars[[i]])
+  print(c(sample_mean,sample_var))
+}
+```
+## Q2
+```{r}
+my_cars$model <- NULL
+cov(my_cars, my_cars)
+cor(my_cars, my_cars)
+```
+From the variance-covariance matrix and correlation matrix we can say from the covariance matrix 
+that if the covariance is positive, the two variable tend to increase or decrease together, if 
+negative, then they tend to change in opposite directions.
+
+## Q3
+```{r}
+plot(my_cars$wt, my_cars$mpg,main = "weight and miles per gallon",
+     xlab = 'weight', ylab = 'miles per galon')
+```
+
+## Q4 
+```{r}
+plot(my_cars$wt,my_cars$mpg,pch = 16, col = my_cars$cyl, main = "weight and miles per gallon",
+     xlab = 'weight', ylab = 'miles per galon')
+```
+<br>
+blue dots represent cars with 4 cylinders, purple dots represent cars with 6 cylinders and grey dots represent cars with 8 cylinders
+
+## Q5
+```{r}
+pairs(my_cars)
+```
+<br>
+
+## Q6
+According to our image in question 4, we agree that the relationship between weight and mpg is subject to the number of cylinders: the blue dots representing cars with 8 cylinders, form a steeper line of best fit, which indicate a stronger correlation between wt and mpg. Whereas the grey dots representing cars with 4 cylinders, form a flatter line of best fit, which weaker correlation between wt and mpg. 
+
+## Q7
+```{r}
+scaled_cars = rapply(my_cars,scale,c("numeric","integer"), how = "replace")
+scaled_cars <- rbind(apply(scaled_cars,MARGIN = 2,FUN = max), scaled_cars)
+scaled_cars <- rbind(apply(scaled_cars,MARGIN = 2,FUN = min), scaled_cars)
+library(fmsb)
+#Overall Radar Chart
+radarchart(scaled_cars)
+most_performance = rbind(rep(max(scaled_cars[2,]),11),rep(min(scaled_cars[1,]),11),scaled_cars[33,])
+#Best Performance Model 
+radarchart(most_performance)
+```
+<br>
+From the overall radar chart, the car represented by the solid green line, which is the Maserati Bora, has the most horsepower and least quarter mile time, so we think this car has the most performance. However, it's hard to directly acquire useful information from this chart alone, since the chart store information for all 32 observations, which cause the lines to be cramped. 
